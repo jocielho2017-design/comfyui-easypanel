@@ -21,13 +21,10 @@ RUN git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git custom_nodes/
 # Instalar dependências do ComfyUI
 RUN pip install -r requirements.txt
 
-# Instalar dependências do ComfyUI-WanVideoWrapper
-RUN pip install -r custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt
+# Instalar dependências do ComfyUI-WanVideoWrapper e onnx
+RUN pip install -r custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt onnx onnxruntime
 
-# Adicionar a instalação do onnx
-RUN pip install onnx
-
-# Expor a porta que o ComfyUI usa (padrão 8188)
+# Expor a porta que o ComfyUI usa (padrão 8188 )
 EXPOSE 8188
 
 # Comando para iniciar o ComfyUI
