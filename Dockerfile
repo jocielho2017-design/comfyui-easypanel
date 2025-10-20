@@ -18,6 +18,9 @@ WORKDIR /app/ComfyUI
 # Instalar dependências do ComfyUI
 RUN pip install -r requirements.txt
 
+# Criar a pasta custom_nodes se ela não existir (garantia )
+RUN mkdir -p custom_nodes
+
 # Clonar ComfyUI-WanVideoWrapper na pasta custom_nodes
 RUN git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git custom_nodes/ComfyUI-WanVideoWrapper
 
@@ -30,7 +33,14 @@ RUN git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git custom
 # Instalar dependências do ComfyUI-VideoHelperSuite
 RUN pip install -r custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt
 
-# Expor a porta que o ComfyUI usa (padrão 8188 )
+# Clonar ComfyUI-KJNodes na pasta custom_nodes
+RUN git clone https://github.com/kijai/ComfyUI-KJNodes.git custom_nodes/ComfyUI-KJNodes
+
+# Instalar dependências do ComfyUI-KJNodes (se houver )
+# Geralmente, KJNodes não tem um requirements.txt complexo, mas é bom ter o comando
+RUN pip install -r custom_nodes/ComfyUI-KJNodes/requirements.txt || echo "No requirements.txt for KJNodes, skipping."
+
+# Expor a porta que o ComfyUI usa (padrão 8188)
 EXPOSE 8188
 
 # Comando para iniciar o ComfyUI
