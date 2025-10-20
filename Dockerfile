@@ -1,30 +1,31 @@
-# Versão do VPS sem GPU NVIDIA
-# Se você tiver um VPS com GPU, a linha FROM precisa ser ajustada.
-FROM python:3.10-slim-bullseye
+# Usar uma imagem base sem suporte a CUDA para CPUs
+FROM python:3.10-slim-bullseye AS base
 
-# Instalar dependências do sistema
-RUN apt-get update && apt-get install -y git wget libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
+# Instalar dependências do sistema necessárias
+RUN apt-get update && apt-get install -y \
+    git wget libgl1 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Define o diretório de trabalho
+# Configurar ambiente Python
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/usr/bin:${PATH}"
+
+# Clonar ComfyUI
 WORKDIR /app
-
-# Clona o repositório do ComfyUI
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git
-
-# Define o diretório de trabalho para dentro do ComfyUI
 WORKDIR /app/ComfyUI
 
-# Clona o WanVideoWrapper para a pasta de custom_nodes
+# Clonar ComfyUI-WanVideoWrapper na pasta custom_nodes
 RUN git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git custom_nodes/ComfyUI-WanVideoWrapper
 
-# Instala as dependências Python do ComfyUI
+# Instalar dependências do ComfyUI
 RUN pip install -r requirements.txt
 
-# Instala as dependências do WanVideoWrapper
+# Instalar dependências do ComfyUI-WanVideoWrapper
 RUN pip install -r custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt
 
-# Expõe a porta que o ComfyUI usará
+# Expor a porta que o ComfyUI usa (padrão 8188)
 EXPOSE 8188
 
-# Comando para iniciar o ComfyUI, escutando em todas as interfaces de rede
-CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188"]
+# Comando para iniciar o ComfyUI
+CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--cpu"]
