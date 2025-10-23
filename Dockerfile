@@ -22,7 +22,7 @@ RUN pip install -r requirements.txt
 RUN mkdir -p custom_nodes
 
 # Clonar ComfyUI-WanVideoWrapper na pasta custom_nodes
-RUN git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git custom_nodes/ComfyUI-WanVideoWrapper
+# RUN git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git custom_nodes/ComfyUI-WanVideoWrapper
 
 # Instalar dependências do ComfyUI-WanVideoWrapper e onnx
 RUN pip install -r custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt onnx onnxruntime
